@@ -482,23 +482,27 @@ def tab_classification(fleet: pd.DataFrame):
 
     # Vehicles classified by heuristic (need review)
     heuristic = fleet[fleet["classification_method"] == "heuristic"].copy()
-    st.subheader(f"Heuristic Classifications ({len(heuristic)} vehicles)")
-    st.markdown("These vehicles were not found in API data and classified by Fordonsslag rules. "
-                "Consider verifying with the underwriter.")
-
     if not heuristic.empty:
+        st.subheader(f"Heuristic Classifications ({len(heuristic)} vehicles)")
+        st.markdown("These vehicles were not found in API data and classified by Fordonsslag rules. "
+                    "Consider verifying with the underwriter.")
         display_cols = ["Client", "regnr", "Marke", "Karosserikod", "Fordonsslag",
                         "TotalVikt", "UW_Kategori"]
         avail = [c for c in display_cols if c in heuristic.columns]
         st.dataframe(heuristic[avail].sort_values(["Client", "UW_Kategori"]),
                      use_container_width=True, hide_index=True)
 
-        # Override section
-        st.subheader("Manual Override")
-        regnr_opts = heuristic["regnr"].dropna().unique().tolist()
+    st.divider()
+
+    # Manual override — human-in-the-loop for heuristic vehicles
+    non_rule = fleet[fleet["classification_method"] == "heuristic"].copy()
+    if not non_rule.empty:
+        st.subheader("✏️ Manual Override")
+        st.markdown("Select a heuristic-classified vehicle to override its category.")
+        regnr_opts = non_rule["regnr"].dropna().unique().tolist()
         if regnr_opts:
             sel = st.selectbox("Vehicle (regnr)", regnr_opts)
-            sel_row = heuristic[heuristic["regnr"] == sel].iloc[0]
+            sel_row = non_rule[non_rule["regnr"] == sel].iloc[0]
             st.caption(f"Current: **{sel_row['UW_Kategori']}** | "
                        f"Brand: {sel_row.get('Marke','?')} | "
                        f"Body: {sel_row.get('Karosserikod','?')} | "
@@ -511,7 +515,7 @@ def tab_classification(fleet: pd.DataFrame):
                 st.success(f"Override saved: {sel} → {new_cat}")
                 st.rerun()
     else:
-        st.success("All vehicles matched via API data — no heuristic classifications!")
+        st.success("All vehicles classified via rule-based mapping — no manual review needed!")
 
 
 # Tab 3: Pricing Model & Assumptions (Underwriter UI)
@@ -664,8 +668,6 @@ def tab_pricing_model(client: str, fleet: pd.DataFrame, claims: pd.DataFrame,
             st.plotly_chart(fig_s, use_container_width=True)
 
     st.divider()
-
-    # ── Model explanation for the underwriter ──
     st.subheader("ℹ️ Model Documentation")
     with st.expander("How does this pricing model work?", expanded=False):
         st.markdown("""
@@ -709,6 +711,241 @@ def tab_pricing_model(client: str, fleet: pd.DataFrame, claims: pd.DataFrame,
         """)
 
 
+# Tab 5: AI & ML Insights
+def tab_ml_insights(client: str, fleet: pd.DataFrame, claims: pd.DataFrame, params: PricingParams):
+    """ML models, credibility weighting, uncertainty, anomaly detection, clustering."""
+    from models import (
+        engineer_client_features, fit_frequency_model, credibility_analysis,
+        bootstrap_premium, detect_claim_anomalies,
+    )
+
+    features = engineer_client_features(fleet, claims)
+
+    # ── 1. Predictive Model ──────────────────────────────────────────────────
+    st.subheader("📈 Predictive Model: Poisson GLM for Claim Frequency")
+    st.markdown(
+        "A **Poisson GLM** predicts claim frequency from fleet characteristics. "
+        "Poisson regression is the standard actuarial approach for count data. "
+        "With only 18 clients, we use **Leave-One-Out cross-validation** to honestly assess generalization."
+    )
+
+    model, scaler, pred_df, importance, metrics = fit_frequency_model(features)
+
+    # ── Model performance summary ──
+    improvement = (1 - metrics["loo_mae"] / metrics["baseline_mae"]) * 100
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Model Error (LOO-CV)", f"{metrics['loo_mae']:.4f}",
+              help="Mean Absolute Error when each client is predicted using a model trained on the other 17")
+    m2.metric("Baseline Error (Mean)", f"{metrics['baseline_mae']:.4f}",
+              help="Error if we just predicted the portfolio average for everyone")
+    m3.metric("Improvement", f"{improvement:+.1f}%",
+              delta=f"{improvement:+.1f}%",
+              delta_color="normal" if improvement > 0 else "inverse",
+              help="Negative = model is worse than just using the average")
+
+    # ── Actual vs Predicted bar chart — one bar per client, easy to read ──
+    bar_df = pred_df[["Client", "claim_frequency", "loo_predicted_freq"]].copy()
+    bar_df = bar_df.sort_values("claim_frequency", ascending=True)
+    bar_df = bar_df.rename(columns={
+        "claim_frequency": "Actual Frequency",
+        "loo_predicted_freq": "Model Prediction",
+    })
+    bar_melt = bar_df.melt(id_vars="Client", var_name="Type", value_name="Claim Frequency")
+
+    fig = px.bar(
+        bar_melt, y="Client", x="Claim Frequency", color="Type", barmode="group",
+        color_discrete_map={"Actual Frequency": "#636EFA", "Model Prediction": "#FFA15A"},
+        title="Actual vs Model-Predicted Claim Frequency per Client",
+    )
+    fig.update_layout(height=500, yaxis_title="", legend_title="",
+                      legend=dict(orientation="h", y=1.08))
+    # Highlight selected client
+    fig.add_annotation(
+        x=bar_df[bar_df["Client"] == client]["Actual Frequency"].values[0] if client in bar_df["Client"].values else 0,
+        y=client, text="◄ Selected", showarrow=False, xanchor="left", xshift=5,
+        font=dict(color="#EF553B", size=12, family="Arial Black"),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    # ── Feature importance — normalized to 100% so values are meaningful ──
+    imp = importance.copy()
+    total = imp["Abs_Coef"].sum()
+    imp["Contribution %"] = (imp["Abs_Coef"] / total * 100).round(1)
+    imp["Direction"] = imp["Coefficient"].apply(lambda c: "↑ More claims" if c > 0 else "↓ Fewer claims")
+    # Friendly names
+    name_map = {
+        "pct_personbil": "% Passenger cars", "fleet_age": "Fleet age",
+        "log_fleet_size": "Fleet size", "pct_brand": "% Fire vehicles",
+        "pct_heavy": "% Heavy vehicles", "fleet_diversity": "Vehicle type diversity",
+    }
+    imp["Feature"] = imp["Feature"].map(name_map).fillna(imp["Feature"])
+
+    fig2 = px.bar(
+        imp, x="Contribution %", y="Feature", orientation="h",
+        color="Direction",
+        color_discrete_map={"↑ More claims": "#EF553B", "↓ Fewer claims": "#00CC96"},
+        title="What Drives Claim Frequency? (Feature Importance)",
+        text="Contribution %",
+    )
+    fig2.update_traces(texttemplate="%{text:.0f}%", textposition="outside")
+    fig2.update_layout(height=350, yaxis_title="", xaxis_title="Relative Importance (%)",
+                       legend_title="", legend=dict(orientation="h", y=1.08))
+    st.plotly_chart(fig2, use_container_width=True)
+
+    # ── Client-specific insight ──
+    cr = pred_df[pred_df["Client"] == client]
+    if not cr.empty:
+        r = cr.iloc[0]
+        diff = r["loo_predicted_freq"] - r["claim_frequency"]
+        if abs(diff) < 0.02:
+            verdict = "The model prediction is **close to observed** — this client behaves as expected given their fleet."
+        elif diff > 0:
+            verdict = f"The model predicts **higher** frequency than observed ({r['loo_predicted_freq']:.3f} vs {r['claim_frequency']:.3f}). This client may be **better than expected** — a positive sign for renewal."
+        else:
+            verdict = f"The model predicts **lower** frequency than observed ({r['loo_predicted_freq']:.3f} vs {r['claim_frequency']:.3f}). This client may carry **higher risk than their fleet profile suggests**."
+        st.info(f"**{client}:** {verdict}")
+
+    st.divider()
+
+    # ── 2. Credibility Weighting ─────────────────────────────────────────────
+    st.subheader("⚖️ Bühlmann Credibility Weighting")
+    st.markdown(
+        "**Problem:** A client with 30 claims might look terrible — but is that real or just bad luck? "
+        "Credibility weighting answers this by blending each client's own experience with the portfolio average. "
+        "Clients with **more data get more trust** (higher Z)."
+    )
+
+    portfolio_freq = features["claim_frequency"].mean()
+    cred_df = credibility_analysis(features, portfolio_freq)
+
+    # ── Table with highlighted selected client ──
+    def _hl(row):
+        return ["background-color: #fff3cd" if row["Client"] == client else "" for _ in row]
+
+    st.dataframe(
+        cred_df.style.apply(_hl, axis=1).format({
+            "Observed Freq": "{:.4f}", "Portfolio Freq": "{:.4f}",
+            "Z-Factor": "{:.3f}", "Credibility Freq": "{:.4f}", "Change %": "{:+.1f}%",
+        }),
+        use_container_width=True, hide_index=True,
+    )
+
+    # ── Client-specific plain-English insight ──
+    cc = cred_df[cred_df["Client"] == client]
+    if not cc.empty:
+        z = cc.iloc[0]
+        trust_pct = int(z["Z-Factor"] * 100)
+        if z["Change %"] > 5:
+            meaning = (
+                f"Their observed frequency ({z['Observed Freq']:.3f}) is **below** the portfolio average "
+                f"({z['Portfolio Freq']:.3f}), but with Z={z['Z-Factor']:.2f} we only trust their data "
+                f"{trust_pct}%. The adjusted frequency is pulled **up** to {z['Credibility Freq']:.3f}. "
+                "For pricing, this means we should charge slightly **more** than raw experience suggests."
+            )
+        elif z["Change %"] < -5:
+            meaning = (
+                f"Their observed frequency ({z['Observed Freq']:.3f}) is **above** the portfolio average, "
+                f"but credibility pulls it **down** to {z['Credibility Freq']:.3f}. "
+                "Some of their bad experience may just be bad luck."
+            )
+        else:
+            meaning = (
+                f"With {int(z['Claims'])} claims, we trust their data {trust_pct}% (Z={z['Z-Factor']:.2f}). "
+                f"Adjustment is small ({z['Change %']:+.1f}%) — their experience is reliable enough to price on directly."
+            )
+        st.info(f"**{client}:** {meaning}")
+
+    with st.expander("📐 Formula"):
+        st.markdown(r"""
+        $$Z = \frac{n}{n + k}, \quad \text{Adjusted Freq} = Z \cdot f_{\text{client}} + (1 - Z) \cdot f_{\text{portfolio}}$$
+
+        - $n$ = number of claims (more claims → more trust)
+        - $k$ = credibility parameter (default 50 — industry standard)
+        - $Z$ close to 1 = trust the client's data; $Z$ close to 0 = use portfolio average instead
+        """)
+
+    st.divider()
+
+    # ── 3. Bootstrap Uncertainty ─────────────────────────────────────────────
+    st.subheader("📊 Premium Uncertainty (Bootstrap)")
+    st.markdown(
+        f"**2,000 bootstrap iterations** for {client}: draw claim count from Poisson(observed), "
+        "resample severities, recalculate premium. This quantifies how much the premium "
+        "estimate could vary due to randomness in claims experience."
+    )
+
+    boot = bootstrap_premium(claims, fleet, client, loading=params.total_loading)
+
+    if "error" not in boot:
+        b1, b2, b3, b4 = st.columns(4)
+        b1.metric("Mean Premium", f"{boot['mean']:,.0f} SEK")
+        b2.metric("90% CI Lower", f"{boot['ci_5']:,.0f} SEK")
+        b3.metric("90% CI Upper", f"{boot['ci_95']:,.0f} SEK")
+        b4.metric("Std Dev", f"{boot['std']:,.0f} SEK")
+
+        ci_width = boot["ci_95"] - boot["ci_5"]
+        st.caption(f"90% confidence interval width: **{ci_width:,.0f} SEK** "
+                   f"({ci_width / boot['mean'] * 100:.1f}% of mean)")
+
+        fig3 = px.histogram(
+            x=boot["premiums"], nbins=50,
+            title=f"Bootstrap Premium Distribution — {client}",
+            labels={"x": "Premium (SEK)", "count": "Frequency"},
+        )
+        fig3.add_vline(x=boot["ci_5"], line_dash="dash", line_color="red",
+                       annotation_text="5th pctl")
+        fig3.add_vline(x=boot["ci_95"], line_dash="dash", line_color="red",
+                       annotation_text="95th pctl")
+        fig3.add_vline(x=boot["mean"], line_dash="solid", line_color="black",
+                       annotation_text="Mean")
+        fig3.update_layout(height=380)
+        st.plotly_chart(fig3, use_container_width=True)
+
+    st.divider()
+
+    # ── 4. Anomaly Detection ─────────────────────────────────────────────────
+    st.subheader("🔍 Claim Anomaly Detection")
+    st.markdown(
+        "IQR-based outlier detection flags unusually severe claims. "
+        "**Outlier:** > Q3 + 1.5×IQR  |  **Severe Outlier:** > Q3 + 3×IQR"
+    )
+
+    anomalies = detect_claim_anomalies(claims, client)
+    if not anomalies.empty:
+        n_outliers = (anomalies["flag"] != "Normal").sum()
+        n_severe = (anomalies["flag"] == "Severe Outlier").sum()
+        a1, a2, a3 = st.columns(3)
+        a1.metric("Non-Zero Claims", len(anomalies))
+        a2.metric("Outliers", int(n_outliers))
+        a3.metric("Severe Outliers", int(n_severe))
+
+        col_a, col_b = st.columns([3, 2])
+        with col_a:
+            fig_a = px.histogram(
+                anomalies, x="Incurred idx", color="flag",
+                color_discrete_map={"Normal": "#636EFA", "Outlier": "#FFA15A", "Severe Outlier": "#EF553B"},
+                nbins=30, title="Severity Distribution with Anomaly Flags",
+                labels={"Incurred idx": "Incurred Amount (SEK)"},
+            )
+            fig_a.update_layout(height=350)
+            st.plotly_chart(fig_a, use_container_width=True)
+
+        with col_b:
+            if n_outliers > 0:
+                st.markdown("**Flagged claims:**")
+                out_df = anomalies[anomalies["flag"] != "Normal"][
+                    ["CLAIM_TYPE", "CLAIM_CAUSE", "CLAIM_YEAR", "Incurred idx", "flag"]
+                ].sort_values("Incurred idx", ascending=False)
+                st.dataframe(
+                    out_df.style.format({"Incurred idx": "{:,.0f}"}),
+                    use_container_width=True, hide_index=True, height=300,
+                )
+            else:
+                st.success("No anomalous claims detected for this client.")
+    else:
+        st.info("No non-zero claims to analyze.")
+
+
 # Main App
 def main():
     st.title("🚗 Protector Fleet Pricing Engine")
@@ -728,10 +965,11 @@ def main():
     metrics, avgs = get_metrics(fleet, claims)
 
     # ── Tabs ──
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         f"🔍 {selected_client} Deep Dive",
         "📊 Portfolio Benchmark",
         "💰 Pricing Model & Assumptions",
+        "🤖 AI & ML Insights",
         "🏷️ Classification Review",
     ])
 
@@ -745,6 +983,9 @@ def main():
         tab_pricing_model(selected_client, fleet, claims, params)
 
     with tab4:
+        tab_ml_insights(selected_client, fleet, claims, params)
+
+    with tab5:
         tab_classification(fleet)
 
 
