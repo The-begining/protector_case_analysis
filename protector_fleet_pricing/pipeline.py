@@ -338,7 +338,7 @@ PROCESSED_DIR = Path(__file__).parent / "data" / "processed"
 
 
 def run_pipeline(filepath: str | Path | None = None, save: bool = True) -> dict:
-    """Full pipeline: load → clean → join → classify → save."""
+    """Full pipeline: load → clean → join → classify → save (CSV + optionally DB)."""
     raw = load_data(filepath)
     clean = clean_data(raw)
     fleet = build_fleet(clean["objects"], clean["api_data"])
@@ -347,6 +347,13 @@ def run_pipeline(filepath: str | Path | None = None, save: bool = True) -> dict:
         PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
         fleet.to_csv(PROCESSED_DIR / "fleet_classified.csv", index=False)
         clean["claims"].to_csv(PROCESSED_DIR / "claims_cleaned.csv", index=False)
+
+        # Upload to PostgreSQL if configured
+        from db import DB_MODE
+        if DB_MODE == "postgres":
+            from db import init_db, upload_to_db
+            init_db()
+            upload_to_db(fleet, clean["claims"])
 
     return {
         "fleet": fleet,

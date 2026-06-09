@@ -10,6 +10,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from pipeline import run_pipeline, VALID_UW_CATEGORIES
+from db import DB_MODE, load_data as load_data_from_source
 from pricing import (
     client_risk_metrics, category_risk_metrics, portfolio_averages,
     calculate_price, PricingParams, sensitivity_analysis, build_category_risk_factors,
@@ -25,6 +26,9 @@ st.set_page_config(
 # Data Loading (cached)
 @st.cache_data(show_spinner="Loading and processing data...")
 def get_data():
+    """Load data from PostgreSQL if configured, otherwise run pipeline (CSV)."""
+    if DB_MODE == "postgres":
+        return load_data_from_source()
     return run_pipeline()
 
 

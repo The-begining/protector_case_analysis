@@ -243,7 +243,7 @@
     </div>
 
     <p class="fade-up delay-4" style="margin-top:32px;color:#4a4a6a;font-size:0.9em">
-      Navigate: Arrow keys or buttons below &nbsp;·&nbsp; 14 slides &nbsp;·&nbsp; ~20 min
+
     </p>
   </div>
 </div>
@@ -423,7 +423,7 @@
       <div class="delta muted">claims per vehicle per year</div>
     </div>
     <div class="kpi">
-      <div class="val">16,246</div>
+      <div class="val">16,565</div>
       <div class="lbl">Avg claim cost (SEK)</div>
       <div class="delta muted">non-zero, indexed</div>
     </div>
@@ -440,28 +440,28 @@
       <p style="margin-bottom:12px">We computed <strong>Loss Rate</strong> per category from FLEET_TYPE claims, then normalised against Personbil (baseline = 1.0):</p>
       <div class="bar-row">
         <div class="bar-label">Tung lastbil</div>
-        <div class="bar-track"><div class="bar-fill" style="width:85%;background:#ef4444">3.12×</div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%;background:#ef4444">2.72×</div></div>
         <div class="bar-value red">HIGH</div>
       </div>
       <div class="bar-row">
         <div class="bar-label">Brandfordon</div>
-        <div class="bar-track"><div class="bar-fill" style="width:50%;background:#f59e0b">1.82×</div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:46%;background:#f59e0b">1.47×</div></div>
         <div class="bar-value amber">MEDIUM</div>
       </div>
       <div class="bar-row">
         <div class="bar-label">Personbil</div>
-        <div class="bar-track"><div class="bar-fill" style="width:28%;background:#6366f1">1.00×</div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:31%;background:#6366f1">1.00×</div></div>
         <div class="bar-value blue">BASELINE</div>
       </div>
       <div class="bar-row">
         <div class="bar-label">Lätt lastbil</div>
-        <div class="bar-track"><div class="bar-fill" style="width:24%;background:#10b981">0.85×</div></div>
+        <div class="bar-track"><div class="bar-fill" style="width:20%;background:#10b981">0.62×</div></div>
         <div class="bar-value green">LOW</div>
       </div>
       <div class="bar-row">
         <div class="bar-label">Släp (trailer)</div>
         <div class="bar-track"><div class="bar-fill" style="width:3%;background:#10b981"></div></div>
-        <div class="bar-value green">0.02×</div>
+        <div class="bar-value green">0.01×</div>
       </div>
       <p style="margin-top:10px;font-size:0.88em;color:#6b6b88">Risk Factor = (Freq × Avg Severity) per type ÷ same for Personbil</p>
     </div>
@@ -470,8 +470,8 @@
       <h3>Finding 2: Flat-rate pricing is unfair</h3>
       <p>If we charge the same per vehicle regardless of type:</p>
       <div class="callout callout-warn" style="font-size:0.95em">
-        We <strong>overprice</strong> low-risk vehicles (trailers at 0.02×) and <strong>underprice</strong> 
-        high-risk ones (heavy trucks at 3.12×). Clients with many trailers get punished; 
+        We <strong>overprice</strong> low-risk vehicles (trailers at 0.01×) and <strong>underprice</strong> 
+        high-risk ones (heavy trucks at 2.72×). Clients with many trailers get punished; 
         clients with many trucks get subsidised.
       </div>
       <p style="margin-top:14px"><strong>Our solution:</strong> Risk-differentiated pricing — each category pays proportionally to its actual observed loss.</p>
@@ -520,28 +520,31 @@
   <div class="grid-2 fade-up delay-3">
     <div class="card">
       <h3>Fleet Composition</h3>
-      <svg width="420" height="170" viewBox="0 0 420 170">
+      <svg width="420" height="180" viewBox="0 0 420 180">
         <circle cx="85" cy="85" r="60" fill="none" stroke="#6366f1" stroke-width="24"
-          stroke-dasharray="239 138" stroke-dashoffset="0" transform="rotate(-90 85 85)"/>
+          stroke-dasharray="193 184" stroke-dashoffset="0" transform="rotate(-90 85 85)"/>
         <circle cx="85" cy="85" r="60" fill="none" stroke="#06b6d4" stroke-width="24"
-          stroke-dasharray="83 294" stroke-dashoffset="-239" transform="rotate(-90 85 85)"/>
+          stroke-dasharray="121 256" stroke-dashoffset="-193" transform="rotate(-90 85 85)"/>
         <circle cx="85" cy="85" r="60" fill="none" stroke="#10b981" stroke-width="24"
-          stroke-dasharray="49 328" stroke-dashoffset="-322" transform="rotate(-90 85 85)"/>
+          stroke-dasharray="51 326" stroke-dashoffset="-314" transform="rotate(-90 85 85)"/>
         <circle cx="85" cy="85" r="60" fill="none" stroke="#f59e0b" stroke-width="24"
-          stroke-dasharray="9 368" stroke-dashoffset="-371" transform="rotate(-90 85 85)"/>
+          stroke-dasharray="9 368" stroke-dashoffset="-365" transform="rotate(-90 85 85)"/>
+        <circle cx="85" cy="85" r="60" fill="none" stroke="#ef4444" stroke-width="24"
+          stroke-dasharray="3 374" stroke-dashoffset="-374" transform="rotate(-90 85 85)"/>
         <text x="85" y="82" text-anchor="middle" font-size="22" font-weight="800" fill="#fff">258</text>
         <text x="85" y="100" text-anchor="middle" font-size="10" fill="#6b6b88">vehicles</text>
 
         <rect x="190" y="22" width="12" height="12" rx="3" fill="#6366f1"/>
-        <text x="208" y="33" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Personbil</tspan>  162 (63%)</text>
+        <text x="208" y="33" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Personbil</tspan>  132 (51%)</text>
         <rect x="190" y="50" width="12" height="12" rx="3" fill="#06b6d4"/>
-        <text x="208" y="61" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Lätt lastbil</tspan>  56 (22%)</text>
+        <text x="208" y="61" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Lätt lastbil</tspan>  83 (32%)</text>
         <rect x="190" y="78" width="12" height="12" rx="3" fill="#10b981"/>
-        <text x="208" y="89" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Släp</tspan>  34 (13%)</text>
+        <text x="208" y="89" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Släp</tspan>  35 (14%)</text>
         <rect x="190" y="106" width="12" height="12" rx="3" fill="#f59e0b"/>
         <text x="208" y="117" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Traktor</tspan>  6 (2%)</text>
-        <text x="190" y="148" font-size="11" fill="#f59e0b" font-weight="600">56 OREG vehicles (unregistered)</text>
-        <text x="190" y="163" font-size="10" fill="#6b6b88">classified via heuristics → reviewable in dashboard</text>
+        <rect x="190" y="134" width="12" height="12" rx="3" fill="#ef4444"/>
+        <text x="208" y="145" font-size="12" fill="#b0b0c8"><tspan font-weight="700" fill="#e8e8f0">Brandfordon</tspan>  2 (1%)</text>
+        <text x="190" y="170" font-size="11" fill="#f59e0b" font-weight="600">56 OREG vehicles (unregistered)</text>
       </svg>
     </div>
 
@@ -637,28 +640,29 @@
 
   <div class="kpi-grid fade-up delay-2" style="justify-content:center">
     <div class="kpi kpi-big kpi-green" style="max-width:400px;border-color:#10b981">
-      <div class="val">530,894 SEK</div>
+      <div class="val">486,163 SEK</div>
       <div class="lbl">Recommended annual premium</div>
-      <div class="delta" style="color:#10b981">2,058 SEK per vehicle per year</div>
+      <div class="delta" style="color:#10b981">1,884 SEK per vehicle per year</div>
     </div>
   </div>
 
   <h3 class="fade-up delay-2" style="margin-top:20px">Category Breakdown — How We Got There</h3>
   <table class="fade-up delay-3">
     <tr><th>Category</th><th>Vehicles</th><th>Frequency</th><th>Risk Factor</th><th>Severity</th><th>Pure Premium</th><th>Share</th></tr>
-    <tr><td>Personbil</td><td>162</td><td>0.148</td><td>1.00×</td><td>12,870</td><td>308,703 SEK</td><td>76%</td></tr>
-    <tr><td>Lätt lastbil</td><td>56</td><td>0.148</td><td>0.85×</td><td>12,870</td><td>90,706 SEK</td><td>22%</td></tr>
-    <tr><td>Traktor</td><td>6</td><td>0.148</td><td>0.60×</td><td>12,870</td><td>6,857 SEK</td><td>2%</td></tr>
-    <tr><td>Släp</td><td>34</td><td>0.148</td><td>0.02×</td><td>12,870</td><td>1,294 SEK</td><td>&lt;1%</td></tr>
-    <tr class="row-highlight" style="font-weight:700"><td>PURE PREMIUM</td><td>258</td><td colspan="4"></td><td style="color:#6366f1">408,380 SEK</td></tr>
+    <tr><td>Personbil</td><td>132</td><td>0.148</td><td>1.00×</td><td>12,870</td><td>251,536 SEK</td><td>67%</td></tr>
+    <tr><td>Lätt lastbil</td><td>83</td><td>0.148</td><td>0.62×</td><td>12,870</td><td>107,867 SEK</td><td>29%</td></tr>
+    <tr><td>Traktor</td><td>6</td><td>0.148</td><td>0.61×</td><td>12,870</td><td>7,672 SEK</td><td>2%</td></tr>
+    <tr><td>Brandfordon</td><td>2</td><td>0.148</td><td>1.47×</td><td>12,870</td><td>6,163 SEK</td><td>2%</td></tr>
+    <tr><td>Släp</td><td>35</td><td>0.148</td><td>0.01×</td><td>12,870</td><td>734 SEK</td><td>&lt;1%</td></tr>
+    <tr class="row-highlight" style="font-weight:700"><td>PURE PREMIUM</td><td>258</td><td colspan="4"></td><td style="color:#6366f1">373,971 SEK</td></tr>
   </table>
 
   <div class="wf fade-up delay-3" style="margin-top:20px">
-    <div class="wf-row"><div class="wf-lbl">Pure Premium</div><div class="wf-bar" style="width:380px;background:linear-gradient(90deg,#6366f1,#818cf8)">408,380 SEK</div></div>
-    <div class="wf-row"><div class="wf-lbl" style="color:#6b6b88">+ Profit (10%)</div><div class="wf-bar" style="width:50px;background:#10b98180">+40,838</div></div>
-    <div class="wf-row"><div class="wf-lbl" style="color:#6b6b88">+ Expenses (15%)</div><div class="wf-bar" style="width:75px;background:#f59e0b80">+61,257</div></div>
-    <div class="wf-row"><div class="wf-lbl" style="color:#6b6b88">+ Reinsurance (5%)</div><div class="wf-bar" style="width:30px;background:#06b6d480">+20,419</div></div>
-    <div class="wf-row"><div class="wf-lbl" style="font-weight:700;color:#fff;font-size:1.1em">Gross Premium</div><div class="wf-bar" style="width:500px;background:linear-gradient(90deg,#10b981,#34d399);font-size:1.1em">530,894 SEK / year</div></div>
+    <div class="wf-row"><div class="wf-lbl">Pure Premium</div><div class="wf-bar" style="width:380px;background:linear-gradient(90deg,#6366f1,#818cf8)">373,971 SEK</div></div>
+    <div class="wf-row"><div class="wf-lbl" style="color:#6b6b88">+ Profit (10%)</div><div class="wf-bar" style="width:48px;background:#10b98180">+37,397</div></div>
+    <div class="wf-row"><div class="wf-lbl" style="color:#6b6b88">+ Expenses (15%)</div><div class="wf-bar" style="width:72px;background:#f59e0b80">+56,096</div></div>
+    <div class="wf-row"><div class="wf-lbl" style="color:#6b6b88">+ Reinsurance (5%)</div><div class="wf-bar" style="width:24px;background:#06b6d480">+18,699</div></div>
+    <div class="wf-row"><div class="wf-lbl" style="font-weight:700;color:#fff;font-size:1.1em">Gross Premium</div><div class="wf-bar" style="width:500px;background:linear-gradient(90deg,#10b981,#34d399);font-size:1.1em">486,163 SEK / year</div></div>
   </div>
 </div>
 
@@ -671,7 +675,7 @@
 
   <div class="kpi-grid fade-up delay-2">
     <div class="kpi kpi-blue">
-      <div class="val">530,894</div>
+      <div class="val">486,163</div>
       <div class="lbl">We charge (SEK/yr)</div>
     </div>
     <div class="kpi kpi-red">
@@ -679,11 +683,11 @@
       <div class="lbl">We pay out (SEK/yr)</div>
     </div>
     <div class="kpi kpi-green">
-      <div class="val">219,437</div>
+      <div class="val">174,706</div>
       <div class="lbl">Gross margin (SEK/yr)</div>
     </div>
     <div class="kpi kpi-green">
-      <div class="val">58.7%</div>
+      <div class="val">64.1%</div>
       <div class="lbl">Loss ratio</div>
       <div class="delta green">&lt; 70% = profitable ✓</div>
     </div>
@@ -693,25 +697,25 @@
     <div class="card">
       <h3>Where Every Premium SEK Goes</h3>
       <svg width="420" height="120" viewBox="0 0 420 120">
-        <rect x="0" y="10" width="247" height="40" rx="6" fill="#ef4444" opacity="0.8"/>
-        <text x="123" y="35" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Claims 58.7%</text>
-        <rect x="247" y="10" width="63" height="40" rx="0" fill="#f59e0b" opacity="0.7"/>
-        <text x="278" y="35" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Exp 15%</text>
-        <rect x="310" y="10" width="21" height="40" rx="0" fill="#06b6d4" opacity="0.7"/>
-        <rect x="331" y="10" width="89" height="40" rx="6" fill="#10b981" opacity="0.85"/>
-        <text x="375" y="35" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">Profit 21%</text>
+        <rect x="0" y="10" width="270" height="40" rx="6" fill="#ef4444" opacity="0.8"/>
+        <text x="135" y="35" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Claims 64.1%</text>
+        <rect x="270" y="10" width="63" height="40" rx="0" fill="#f59e0b" opacity="0.7"/>
+        <text x="301" y="35" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Exp 15%</text>
+        <rect x="333" y="10" width="21" height="40" rx="0" fill="#06b6d4" opacity="0.7"/>
+        <rect x="354" y="10" width="66" height="40" rx="6" fill="#10b981" opacity="0.85"/>
+        <text x="387" y="35" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">Profit 16%</text>
 
         <text x="0" y="75" font-size="11" fill="#ef4444">● Claims: 311,457 SEK</text>
-        <text x="0" y="93" font-size="11" fill="#f59e0b">● Expenses: 79,634 SEK</text>
-        <text x="200" y="75" font-size="11" fill="#06b6d4">● Reinsurance: 26,545 SEK</text>
-        <text x="200" y="93" font-size="12" fill="#10b981" font-weight="700">● Profit: 113,258 SEK</text>
+        <text x="0" y="93" font-size="11" fill="#f59e0b">● Expenses: 72,924 SEK</text>
+        <text x="200" y="75" font-size="11" fill="#06b6d4">● Reinsurance: 24,308 SEK</text>
+        <text x="200" y="93" font-size="12" fill="#10b981" font-weight="700">● Profit: 77,473 SEK</text>
       </svg>
     </div>
 
     <div class="card">
       <h3 style="color:#10b981">H3 Confirmed <span class="pill pill-green">✓</span></h3>
-      <p>At <strong style="color:#fff">530,894 SEK</strong>, Protector earns a <strong style="color:#fff">21.3% margin</strong> on Client 18.</p>
-      <p style="margin-top:10px">The loss ratio of 58.7% is well within the profitable zone (&lt;70%).</p>
+      <p>At <strong style="color:#fff">486,163 SEK</strong>, Protector earns a <strong style="color:#fff">15.9% margin</strong> on Client 18.</p>
+      <p style="margin-top:10px">The loss ratio of 64.1% is well within the profitable zone (&lt;70%).</p>
       <div class="callout callout-insight" style="margin-top:12px;font-size:0.92em">
         <strong>Portfolio-wide:</strong> All 18 clients are profitable at our recommended premiums 
         — loss ratios range from 29% to 63%.
@@ -770,7 +774,7 @@
           <div class="bar-track">
             <div class="bar-fill" style="width:67%;background:#3a3a5a">10,145 SEK</div>
           </div>
-          <div class="bar-value green" style="width:90px">40% better</div>
+          <div class="bar-value green" style="width:90px">41% better</div>
         </div>
       </div>
     </div>
@@ -807,33 +811,33 @@
       <div style="margin-top:12px">
         <div class="bar-row">
           <div class="bar-label" style="width:170px;font-size:0.88em">Freq ×1.5 (pessimistic)</div>
-          <div class="bar-track"><div class="bar-fill" style="width:92%;background:linear-gradient(90deg,#ef4444,#f87171)">796,341 SEK</div></div>
+          <div class="bar-track"><div class="bar-fill" style="width:92%;background:linear-gradient(90deg,#ef4444,#f87171)">729,244 SEK</div></div>
           <div class="bar-value red" style="width:60px">+50%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label" style="width:170px;font-size:0.88em">Risk factors OFF</div>
-          <div class="bar-track"><div class="bar-fill" style="width:75%;background:linear-gradient(90deg,#f59e0b,#fbbf24)">649,039 SEK</div></div>
-          <div class="bar-value amber" style="width:60px">+22%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:84%;background:linear-gradient(90deg,#f59e0b,#fbbf24)">670,344 SEK</div></div>
+          <div class="bar-value amber" style="width:60px">+38%</div>
         </div>
         <div class="bar-row">
           <div class="bar-label" style="width:170px;font-size:0.88em">Margin 20%</div>
-          <div class="bar-track"><div class="bar-fill" style="width:71%;background:linear-gradient(90deg,#f59e0b,#fbbf24)">612,570 SEK</div></div>
-          <div class="bar-value amber" style="width:60px">+15%</div>
+          <div class="bar-track"><div class="bar-fill" style="width:66%;background:linear-gradient(90deg,#f59e0b,#fbbf24)">523,560 SEK</div></div>
+          <div class="bar-value amber" style="width:60px">+8%</div>
         </div>
         <div class="bar-row" style="margin:12px 0;border-top:1px solid #2a2a4a;padding-top:12px">
           <div class="bar-label" style="width:170px;font-size:0.88em;color:#6366f1;font-weight:700">Default (recommended)</div>
-          <div class="bar-track"><div class="bar-fill" style="width:61%;background:linear-gradient(90deg,#6366f1,#818cf8)">530,894 SEK</div></div>
+          <div class="bar-track"><div class="bar-fill" style="width:61%;background:linear-gradient(90deg,#6366f1,#818cf8)">486,163 SEK</div></div>
           <div class="bar-value blue" style="width:60px">BASE</div>
         </div>
         <div class="bar-row">
-          <div class="bar-label" style="width:170px;font-size:0.88em">Freq ×0.8 (competitive)</div>
-          <div class="bar-track"><div class="bar-fill" style="width:49%;background:linear-gradient(90deg,#10b981,#34d399)">424,715 SEK</div></div>
-          <div class="bar-value green" style="width:60px">−20%</div>
+          <div class="bar-label" style="width:170px;font-size:0.88em">Margin 5% (aggressive)</div>
+          <div class="bar-track"><div class="bar-fill" style="width:59%;background:linear-gradient(90deg,#10b981,#34d399)">467,464 SEK</div></div>
+          <div class="bar-value green" style="width:60px">−4%</div>
         </div>
         <div class="bar-row">
-          <div class="bar-label" style="width:170px;font-size:0.88em">Margin 5% (aggressive)</div>
-          <div class="bar-track"><div class="bar-fill" style="width:58%;background:linear-gradient(90deg,#10b981,#34d399)">504,069 SEK</div></div>
-          <div class="bar-value green" style="width:60px">−5%</div>
+          <div class="bar-label" style="width:170px;font-size:0.88em">Freq ×0.8 (competitive)</div>
+          <div class="bar-track"><div class="bar-fill" style="width:49%;background:linear-gradient(90deg,#10b981,#34d399)">388,930 SEK</div></div>
+          <div class="bar-value green" style="width:60px">−20%</div>
         </div>
       </div>
     </div>
@@ -853,8 +857,8 @@
       </table>
       <div class="callout callout-info" style="margin-top:14px;font-size:0.9em">
         <strong>Key insight:</strong> Price is most sensitive to <strong>claim frequency</strong>. 
-        A 50% increase in expected frequency adds 265K SEK. Risk differentiation 
-        saves 118K vs flat-rate — directly benefiting low-risk clients.
+        A 50% increase in expected frequency adds 243K SEK. Risk differentiation 
+        saves 184K vs flat-rate — directly benefiting low-risk clients.
       </div>
     </div>
   </div>
@@ -904,33 +908,44 @@
 
   <div class="grid-2 fade-up delay-2">
     <div>
-      <div class="flow-box" style="margin:10px 0;border-color:#6366f1;text-align:left;padding:16px 24px">
+      <div class="flow-box" style="margin:8px 0;border-color:#6366f1;text-align:left;padding:14px 24px">
         <strong style="color:#6366f1">Tab 1 — Client Deep Dive</strong>
         <span>KPIs, price proposal, fleet breakdown, claims timeline, top claim types</span>
       </div>
-      <div class="flow-box" style="margin:10px 0;border-color:#06b6d4;text-align:left;padding:16px 24px">
+      <div class="flow-box" style="margin:8px 0;border-color:#06b6d4;text-align:left;padding:14px 24px">
         <strong style="color:#06b6d4">Tab 2 — Portfolio Benchmark</strong>
         <span>Risk scatter, radar chart, ranked table — where does Client 18 sit?</span>
       </div>
-      <div class="flow-box" style="margin:10px 0;border-color:#10b981;text-align:left;padding:16px 24px">
+      <div class="flow-box" style="margin:8px 0;border-color:#10b981;text-align:left;padding:14px 24px">
         <strong style="color:#10b981">Tab 3 — Pricing Model</strong>
         <span>Risk factors table, category breakdown, sensitivity charts, all assumptions</span>
       </div>
-      <div class="flow-box" style="margin:10px 0;border-color:#f59e0b;text-align:left;padding:16px 24px">
-        <strong style="color:#f59e0b">Sidebar — Adjust & Explore</strong>
-        <span>Change frequency to ×1.5, watch premium jump to 796K. Toggle risk factors off → 649K.</span>
+      <div class="flow-box" style="margin:8px 0;border-color:#f59e0b;text-align:left;padding:14px 24px">
+        <strong style="color:#f59e0b">Tab 4 — AI & ML Insights</strong>
+        <span>Poisson GLM frequency model, credibility weighting, bootstrap confidence intervals, anomaly detection</span>
       </div>
-      <div class="flow-box" style="margin:10px 0;border-color:#ef4444;text-align:left;padding:16px 24px">
-        <strong style="color:#ef4444">Tab 4 — Classification Review</strong>
+      <div class="flow-box" style="margin:8px 0;border-color:#ef4444;text-align:left;padding:14px 24px">
+        <strong style="color:#ef4444">Tab 5 — Classification Review</strong>
         <span>OREG vehicles, human-in-the-loop override, quality check</span>
+      </div>
+      <div class="flow-box" style="margin:8px 0;border-color:#8b5cf6;text-align:left;padding:14px 24px">
+        <strong style="color:#8b5cf6">Sidebar — Adjust & Explore</strong>
+        <span>Change frequency ×1.5 → premium jumps to 796K. Toggle risk factors off → 649K.</span>
       </div>
     </div>
     <div class="card" style="display:flex;flex-direction:column;justify-content:center;text-align:center">
       <p style="color:#6b6b88;font-size:0.9em;margin-bottom:16px">Launch command</p>
-      <div style="background:#0a0a1a;border:1px solid #2a2a4a;border-radius:10px;padding:20px;font-family:monospace;font-size:1.2em;color:#10b981">
+      <div style="background:#0a0a1a;border:1px solid #2a2a4a;border-radius:10px;padding:16px;font-family:monospace;font-size:1.1em;color:#10b981">
         streamlit run app.py
       </div>
-      <p style="margin-top:24px;color:#6b6b88;font-size:0.88em">
+      <p style="margin-top:16px;color:#6b6b88;font-size:0.85em">
+        Two data modes available:
+      </p>
+      <div style="background:#0a0a1a;border:1px solid #2a2a4a;border-radius:10px;padding:12px;font-family:monospace;font-size:0.85em;color:#06b6d4;margin-top:8px">
+        DB_MODE=csv &nbsp;→&nbsp; local files<br>
+        DB_MODE=postgres &nbsp;→&nbsp; database
+      </div>
+      <p style="margin-top:16px;color:#6b6b88;font-size:0.85em">
         Select any of the 18 clients from the sidebar.<br>
         All prices recalculate in real time.
       </p>
@@ -939,53 +954,145 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- SLIDE 13 — BEYOND THE TASK                                    -->
+<!-- SLIDE 13 — SCALING THE SOLUTION                               -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<div class="slide" data-title="Strategic Vision">
-  <div class="section-tag fade-up">Thinking Beyond</div>
-  <h2 class="fade-up delay-1">From Prototype to Production</h2>
+<div class="slide" data-title="Scaling">
+  <div class="section-tag fade-up">Strategic Question 1</div>
+  <h2 class="fade-up delay-1">Scaling to 30+ Clients</h2>
+  <p class="fade-up delay-1">How would we help an underwriter efficiently assess 30+ clients and prioritise their work?</p>
 
-  <div class="grid-3 fade-up delay-2">
+  <div class="grid-2 fade-up delay-2" style="margin-top:16px">
     <div class="card" style="border-top:3px solid #6366f1">
-      <h3 style="color:#6366f1">Scaling to 30+ Clients</h3>
+      <h3 style="color:#6366f1">Prioritisation Engine</h3>
       <ul>
-        <li><strong>Priority dashboard</strong> — rank by risk score × renewal urgency</li>
-        <li><strong>Portfolio heatmap</strong> — risk × size matrix for quick triage</li>
-        <li><strong>Batch pricing</strong> — all clients in one run, CSV export</li>
-        <li><strong>Anomaly alerts</strong> — flag >20% YoY claims increase</li>
-        <li><strong>Credibility weighting</strong> — blend client data with portfolio for small fleets</li>
+        <li><strong>Risk Score × Renewal Urgency</strong> — auto-rank clients by combined risk and time pressure</li>
+        <li><strong>Portfolio heatmap</strong> — 2D matrix (fleet size vs loss ratio) for instant visual triage</li>
+        <li><strong>Traffic light system</strong> — <span class="red">Red</span> (loss ratio &gt;80%), <span class="amber">Amber</span> (60–80%), <span class="green">Green</span> (&lt;60%) — focus attention where it matters</li>
+        <li><strong>Anomaly alerts</strong> — auto-flag clients with &gt;20% YoY claims spike or new large losses</li>
       </ul>
     </div>
-    <div class="card" style="border-top:3px solid #10b981">
-      <h3 style="color:#10b981">Evolving the Pricing</h3>
+    <div class="card" style="border-top:3px solid #06b6d4">
+      <h3 style="color:#06b6d4">Batch Operations</h3>
       <ul>
-        <li><strong>GLM modelling</strong> — Poisson + Gamma when data permits</li>
-        <li><strong>Telematics</strong> — driving behaviour, mileage, accident history</li>
-        <li><strong>Claims development</strong> — triangles for IBNR reserves</li>
-        <li><strong>Live vehicle registry</strong> — real-time data enrichment via API</li>
-        <li><strong>Competitor benchmarking</strong> — market rate comparison</li>
-      </ul>
-    </div>
-    <div class="card" style="border-top:3px solid #f59e0b">
-      <h3 style="color:#f59e0b">Path to Production</h3>
-      <ul>
-        <li><strong>Database</strong> — PostgreSQL, audit trail, version control</li>
-        <li><strong>Auth</strong> — role-based access (viewer / underwriter / admin)</li>
-        <li><strong>API layer</strong> — FastAPI backend, decouple UI from logic</li>
-        <li><strong>CI/CD</strong> — automated testing, Docker, monitoring</li>
-        <li><strong>ML pipeline</strong> — model drift detection, retraining triggers</li>
+        <li><strong>One-click portfolio pricing</strong> — price all 30 clients in a single run, export to CSV/Excel</li>
+        <li><strong>Comparison view</strong> — side-by-side client cards with KPIs, not one-at-a-time</li>
+        <li><strong>Template quotes</strong> — save pricing parameters per segment, apply to similar clients</li>
+        <li><strong>Credibility weighting</strong> — small fleets (&lt;20 vehicles) auto-blend with portfolio data using Bühlmann Z</li>
       </ul>
     </div>
   </div>
 
-  <div class="callout callout-info fade-up delay-3" style="margin-top:16px">
-    <strong>Core principle:</strong> This prototype proves the analytical framework. 
-    The same hypothesis-driven, transparent approach scales — only the infrastructure and data sources need to grow.
+  <div class="grid-2 fade-up delay-3">
+    <div class="callout callout-insight">
+      <strong>Already built:</strong> The credibility model in Tab 4 calculates Bühlmann Z for every client — clients with Z &lt; 0.5 (small fleets) rely more on portfolio averages, giving stable pricing even with sparse data.
+    </div>
+    <div class="callout callout-info">
+      <strong>Key principle:</strong> The underwriter's time is the bottleneck. Every feature should reduce the number of decisions they need to make — from "assess all 30" to "review the 5 that need attention."
+    </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- SLIDE 14 — SUMMARY                                            -->
+<!-- SLIDE 14 — EVOLVING THE PRICING                               -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-title="Evolving Pricing">
+  <div class="section-tag fade-up">Strategic Question 2</div>
+  <h2 class="fade-up delay-1">Evolving the Pricing Logic</h2>
+  <p class="fade-up delay-1">New data sources and advanced modelling to create a more dynamic and competitive pricing engine.</p>
+
+  <div class="grid-2 fade-up delay-2" style="margin-top:16px">
+    <div class="card" style="border-top:3px solid #10b981">
+      <h3 style="color:#10b981">New Data Sources</h3>
+      <table>
+        <tr><td><span class="pill pill-green">HIGH</span></td><td><strong>Telematics</strong> — driving behaviour, mileage, harsh braking. Strongest predictor of actual risk.</td></tr>
+        <tr><td><span class="pill pill-green">HIGH</span></td><td><strong>Claims development triangles</strong> — track how claim costs evolve over time → better IBNR reserves.</td></tr>
+        <tr><td><span class="pill pill-blue">MED</span></td><td><strong>Live vehicle registry API</strong> — real-time enrichment instead of static Excel snapshots.</td></tr>
+        <tr><td><span class="pill pill-blue">MED</span></td><td><strong>Weather & geography</strong> — regional risk factors (e.g. northern Sweden = more ice claims).</td></tr>
+        <tr><td><span class="pill pill-amber">LOW</span></td><td><strong>Competitor pricing</strong> — market benchmark to ensure competitiveness without underpricing.</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-top:3px solid #f59e0b">
+      <h3 style="color:#f59e0b">Advanced Modelling</h3>
+      <table>
+        <tr><td><span class="pill pill-green">BUILT</span></td><td><strong>Poisson GLM</strong> — already in Tab 4. Frequency model with LOO cross-validation.</td></tr>
+        <tr><td><span class="pill pill-blue">NEXT</span></td><td><strong>Gamma GLM for severity</strong> — model claim costs separately, combine with Poisson for pure premium.</td></tr>
+        <tr><td><span class="pill pill-blue">NEXT</span></td><td><strong>Per-vehicle pricing</strong> — with vehicle-level claims linkage, price individual assets not just categories.</td></tr>
+        <tr><td><span class="pill pill-amber">FUTURE</span></td><td><strong>Gradient boosted trees</strong> — XGBoost/LightGBM for non-linear risk interactions when data grows.</td></tr>
+        <tr><td><span class="pill pill-amber">FUTURE</span></td><td><strong>NLP on claim descriptions</strong> — extract risk signals from free-text claim narratives.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout callout-warn fade-up delay-3" style="margin-top:12px">
+    <strong>Current limitation:</strong> Claims are linked to clients, not individual vehicles. With per-vehicle linkage, we could build a true Poisson-Gamma compound model — the gold standard for insurance pricing. The burning cost approach is the right starting point given the data we have.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 15 — PATH TO PRODUCTION                                 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="slide" data-title="Production Path">
+  <div class="section-tag fade-up">Strategic Question 3</div>
+  <h2 class="fade-up delay-1">The Path to Production</h2>
+  <p class="fade-up delay-1">Key technical and operational steps to transform this prototype into a production tool.</p>
+
+  <div class="flow fade-up delay-2" style="margin:20px 0">
+    <div class="flow-box" style="border-color:#6366f1">
+      <strong>Data Layer</strong>
+      <span>PostgreSQL<br><span class="pill pill-green" style="font-size:0.7em">DONE</span></span>
+    </div>
+    <div class="flow-arr">→</div>
+    <div class="flow-box" style="border-color:#06b6d4">
+      <strong>ETL Pipeline</strong>
+      <span>pipeline.py<br><span class="pill pill-green" style="font-size:0.7em">DONE</span></span>
+    </div>
+    <div class="flow-arr">→</div>
+    <div class="flow-box" style="border-color:#10b981">
+      <strong>API Layer</strong>
+      <span>FastAPI<br><span class="pill pill-amber" style="font-size:0.7em">NEXT</span></span>
+    </div>
+    <div class="flow-arr">→</div>
+    <div class="flow-box" style="border-color:#f59e0b">
+      <strong>Frontend</strong>
+      <span>Streamlit<br><span class="pill pill-green" style="font-size:0.7em">DONE</span></span>
+    </div>
+    <div class="flow-arr">→</div>
+    <div class="flow-box" style="border-color:#ef4444">
+      <strong>Deploy</strong>
+      <span>Docker + CI/CD<br><span class="pill pill-amber" style="font-size:0.7em">NEXT</span></span>
+    </div>
+  </div>
+
+  <div class="grid-2 fade-up delay-3">
+    <div class="card">
+      <h3>What's Already Production-Ready</h3>
+      <table>
+        <tr><td><span class="green">✓</span></td><td><strong>PostgreSQL integration</strong> — dual-mode (CSV/Postgres), indexed tables, bulk upload via COPY</td></tr>
+        <tr><td><span class="green">✓</span></td><td><strong>Environment config</strong> — .env file for secrets, DB_MODE switch, no hardcoded credentials</td></tr>
+        <tr><td><span class="green">✓</span></td><td><strong>Automated tests</strong> — 11 pytest tests covering data quality, pricing, and ML models</td></tr>
+        <tr><td><span class="green">✓</span></td><td><strong>Docker-ready</strong> — Dockerfile included, containerised deployment</td></tr>
+        <tr><td><span class="green">✓</span></td><td><strong>Git version control</strong> — tagged releases (v1 = CSV-only, v2 = with PostgreSQL)</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Remaining Steps for Production</h3>
+      <table>
+        <tr><td><span class="pill pill-amber">AUTH</span></td><td>Role-based access — viewer / underwriter / admin with SSO integration</td></tr>
+        <tr><td><span class="pill pill-amber">API</span></td><td>FastAPI backend — decouple pricing logic from UI, enable integrations</td></tr>
+        <tr><td><span class="pill pill-amber">CI/CD</span></td><td>GitHub Actions — auto-run tests on push, deploy to staging/prod</td></tr>
+        <tr><td><span class="pill pill-amber">MONITOR</span></td><td>Logging & alerting — track model drift, data quality, usage metrics</td></tr>
+        <tr><td><span class="pill pill-amber">AUDIT</span></td><td>Price change audit trail — who changed what, when, and why</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout callout-info fade-up delay-4" style="margin-top:12px">
+    <strong>Architecture choice:</strong> PostgreSQL was chosen over Snowflake/BigQuery because it's free, self-hosted, and perfectly suited for 2,376 vehicles. The abstraction layer in db.py means switching to a cloud warehouse later is just a connection change — the pipeline stays the same.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SLIDE 16 — SUMMARY                                            -->
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <div class="slide" data-title="Summary">
   <div class="home-bg"></div>
@@ -998,7 +1105,7 @@
         <div class="hyp-id hyp-confirmed">H1 ✓</div>
         <div>
           <p><strong style="color:#fff">Vehicle type drives risk</strong></p>
-          <p style="font-size:0.92em">Risk factors range from <strong style="color:#fff">0.02× (trailers)</strong> to <strong style="color:#fff">3.12× (heavy trucks)</strong> — flat pricing is unfair and inaccurate.</p>
+          <p style="font-size:0.92em">Risk factors range from <strong style="color:#fff">0.01× (trailers)</strong> to <strong style="color:#fff">2.72× (heavy trucks)</strong> — flat pricing is unfair and inaccurate.</p>
         </div>
       </div>
       <div class="hyp-card">
@@ -1011,28 +1118,31 @@
       <div class="hyp-card">
         <div class="hyp-id hyp-confirmed">H3 ✓</div>
         <div>
-          <p><strong style="color:#fff">530,894 SEK is profitable and competitive</strong></p>
-          <p style="font-size:0.92em"><strong style="color:#fff">58.7% loss ratio</strong>, <strong style="color:#fff">113K annual profit</strong>. Well within the profitable range.</p>
+          <p><strong style="color:#fff">486,163 SEK is profitable and competitive</strong></p>
+          <p style="font-size:0.92em"><strong style="color:#fff">64.1% loss ratio</strong>, <strong style="color:#fff">77K annual profit</strong>. Well within the profitable range.</p>
         </div>
       </div>
     </div>
 
     <div class="kpi-grid fade-up delay-3" style="max-width:600px;margin-top:28px">
       <div class="kpi kpi-green kpi-big" style="border-color:#10b981">
-        <div class="val">530,894</div>
+        <div class="val">486,163</div>
         <div class="lbl">SEK / year</div>
       </div>
       <div class="kpi kpi-green">
-        <div class="val">2,058</div>
+        <div class="val">1,884</div>
         <div class="lbl">SEK / vehicle</div>
       </div>
       <div class="kpi kpi-green">
-        <div class="val">58.7%</div>
+        <div class="val">64.1%</div>
         <div class="lbl">Loss ratio</div>
       </div>
     </div>
 
-    <p class="fade-up delay-4" style="margin-top:32px;font-size:1.2em;color:#8888a8">
+    <p class="fade-up delay-4" style="margin-top:24px;font-size:1.1em;color:#8888a8">
+      Built with: Python · Streamlit · PostgreSQL · scikit-learn · Plotly · Docker
+    </p>
+    <p class="fade-up delay-4" style="margin-top:12px;font-size:1.2em;color:#6366f1;font-weight:600">
       Questions & Discussion
     </p>
   </div>
@@ -1043,7 +1153,7 @@
 <!-- ═══════════════════════════════════════════════════════════════ -->
 <div class="nav-bar">
   <div class="nav-left">
-    <span class="slide-counter" id="counter">1 / 14</span>
+    <span class="slide-counter" id="counter">1 / 17</span>
     <span class="slide-title-mini" id="slideTitle">Home</span>
   </div>
   <div class="nav-right">
